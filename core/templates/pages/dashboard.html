@@ -1,0 +1,29 @@
+<!-- core/templates/pages/dashboard.html -->
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Bem-vindo ao Dashboard</h5>
+                <p class="card-text">
+                    Este é um exemplo de dashboard. Observe que o menu lateral mostra apenas
+                    as opções para as quais você tem permissão.
+                </p>
+                <p>
+                    <strong>Usuário:</strong> {{ request.user.username }}<br>
+                    <strong>Grupos:</strong> 
+                    {% for group in request.user.groups.all %}
+                        {{ group.name }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        Nenhum grupo
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

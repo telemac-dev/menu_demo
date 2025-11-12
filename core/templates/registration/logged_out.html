@@ -1,0 +1,18 @@
+<!-- core/templates/registration/logged_out.html -->
+{% extends 'base.html' %}
+
+{% block title %}Logout{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body text-center">
+                <h4 class="mb-3">Você saiu do sistema</h4>
+                <p>Obrigado por usar nossa aplicação.</p>
+                <a href="{% url 'login' %}" class="btn btn-primary">Entrar novamente</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

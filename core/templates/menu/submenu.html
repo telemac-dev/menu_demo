@@ -1,0 +1,27 @@
+<!-- core/templates/menu/submenu.html -->
+{% load menu_tags %}
+
+<ul class="nav flex-column">
+    {% for item in menu_items %}
+        <li class="nav-item">
+            {% if item|has_children %}
+                <a class="nav-link {% is_active item.url %}" 
+                   data-bs-toggle="collapse" 
+                   href="#submenu-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" 
+                   role="button">
+                    {{ item.name }}
+                    <i class="fas fa-angle-down float-end mt-1"></i>
+                </a>
+                <div class="collapse" id="submenu-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                    <div class="submenu">
+                        {% render_submenu item.children %}
+                    </div>
+                </div>
+            {% else %}
+                <a class="nav-link {% is_active item.url %}" href="{% url item.url %}">
+                    {{ item.name }}
+                </a>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
