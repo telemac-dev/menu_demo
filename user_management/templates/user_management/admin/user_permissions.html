@@ -1,0 +1,89 @@
+<!-- user_management/templates/user_management/admin/user_permissions.html -->
+{% extends 'base.html' %}
+
+{% block title %}Gerenciar Permissões - {{ managed_user.username }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Permissões do Usuário: {{ managed_user.username }}</h5>
+        <a href="{% url 'user_management:user_list' %}" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Voltar à Lista
+        </a>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+
+            {% if messages %}
+            <div class="alert alert-success">
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="mb-4">
+                <h6>Informações do Usuário</h6>
+                <div class="row">
+                    <div class="col-md-4">
+                        <p><strong>Nome:</strong> {{ managed_user.get_full_name }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>Email:</strong> {{ managed_user.email }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>Status:</strong> 
+                            {% if managed_user.is_active %}
+                            <span class="badge bg-success">Ativo</span>
+                            {% else %}
+                            <span class="badge bg-danger">Inativo</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h6>Grupos</h6>
+                <div class="card">
+                    <div class="card-body">
+                        {{ form.groups }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h6>Permissões Diretas</h6>
+                <p class="text-muted small">Estas permissões são atribuídas diretamente ao usuário, independentemente dos grupos.</p>
+
+                <div class="accordion" id="permissionsAccordion">
+                    {% for field in form %}
+                        {% if field.name != 'groups' %}
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                            data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false" 
+                                            aria-controls="collapse{{ forloop.counter }}">
+                                        {{ field.label }}
+                                    </button>
+                                </h2>
+                                <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" 
+                                     aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#permissionsAccordion">
+                                    <div class="accordion-body">
+                                        {{ field }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

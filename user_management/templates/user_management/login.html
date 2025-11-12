@@ -1,4 +1,4 @@
-<!-- core/templates/registration/login.html -->
+<!-- user_management/templates/user_management/login.html -->
 {% extends 'base.html' %}
 
 {% block title %}Login{% endblock %}
@@ -30,7 +30,7 @@
                     {% endif %}
                 {% endif %}
 
-                <form method="post" action="{% url 'login' %}">
+                <form method="post" action="{% url 'user_management:login' %}">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="id_username" class="form-label">Nome de usuário</label>
@@ -45,6 +45,10 @@
                     </div>
                     <input type="hidden" name="next" value="{{ next }}">
                 </form>
+
+                <div class="mt-3 text-center">
+                    <p>Não tem uma conta? <a href="{% url 'user_management:register' %}">Registre-se</a></p>
+                </div>
             </div>
         </div>
     </div>

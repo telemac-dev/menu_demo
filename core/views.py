@@ -3,11 +3,24 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.generic import TemplateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from user_management.models import UserAccessLog  # Adicionar esta importação
 
 # Views simples para demonstração
+# core/views.py
 @login_required
 def dashboard(request):
-    return render(request, 'pages/dashboard.html')
+    """
+    Renderiza a página do dashboard com informações personalizadas.
+    """
+    # Obter atividades recentes do usuário
+    recent_activities = UserAccessLog.objects.filter(user=request.user).order_by('-timestamp')[:5]
+
+    # Você pode adicionar outras informações relevantes aqui
+
+    return render(request, 'pages/dashboard.html', {
+        'recent_activities': recent_activities,
+    })
+
 
 # Views baseadas em classe para projetos
 class ProjectListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):

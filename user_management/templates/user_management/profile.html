@@ -1,0 +1,189 @@
+<!-- user_management/templates/user_management/profile.html -->
+{% extends 'base.html' %}
+
+{% block title %}Meu Perfil{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Informações do Perfil</h5>
+                <div>
+                    <a href="{% url 'user_management:change_password' %}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-key me-1"></i> Alterar Senha
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if messages %}
+                    <div class="alert alert-success">
+                        {% for message in messages %}
+                        {{ message }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.first_name.id_for_label }}" class="form-label">Nome</label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                            <div class="text-danger">
+                                {% for error in form.first_name.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.last_name.id_for_label }}" class="form-label">Sobrenome</label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                            <div class="text-danger">
+                                {% for error in form.last_name.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                        <div class="text-danger">
+                            {% for error in form.email.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.position.id_for_label }}" class="form-label">Cargo</label>
+                        {{ form.position }}
+                        {% if form.position.errors %}
+                        <div class="text-danger">
+                            {% for error in form.position.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.department.id_for_label }}" class="form-label">Departamento</label>
+                        {{ form.department }}
+                        {% if form.department.errors %}
+                        <div class="text-danger">
+                            {% for error in form.department.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.phone.id_for_label }}" class="form-label">Telefone</label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                        <div class="text-danger">
+                            {% for error in form.phone.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.bio.id_for_label }}" class="form-label">Biografia</label>
+                        {{ form.bio }}
+                        {% if form.bio.errors %}
+                        <div class="text-danger">
+                            {% for error in form.bio.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.profile_image.id_for_label }}" class="form-label">Imagem de Perfil</label>
+                        {{ form.profile_image }}
+                        {% if form.profile_image.errors %}
+                        <div class="text-danger">
+                            {% for error in form.profile_image.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Atividade Recente</h5>
+                <a href="{% url 'user_management:access_history' %}" class="btn btn-sm btn-outline-secondary">
+                    Ver Tudo
+                </a>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    {% for log in access_logs %}
+                    <li class="list-group-item">
+                        <small class="text-muted">{{ log.timestamp|date:"d/m/Y H:i" }}</small>
+                        <div>
+                            {% if log.action == 'login' %}
+                            <i class="fas fa-sign-in-alt text-success me-1"></i> Login
+                            {% elif log.action == 'logout' %}
+                            <i class="fas fa-sign-out-alt text-danger me-1"></i> Logout
+                            {% elif log.action == 'page_view' %}
+                            <i class="fas fa-eye text-primary me-1"></i> Visualizou: {{ log.path }}
+                            {% else %}
+                            <i class="fas fa-cog me-1"></i> {{ log.action }}
+                            {% endif %}
+                        </div>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-center py-3">
+                        <em>Nenhuma atividade registrada</em>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Informações da Conta</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Nome de usuário:</strong> {{ user.username }}</p>
+                <p><strong>Membro desde:</strong> {{ user.date_joined|date:"d/m/Y" }}</p>
+                <p><strong>Último login:</strong> {{ user.last_login|date:"d/m/Y H:i" }}</p>
+                <p>
+                    <strong>Grupos:</strong>
+                    {% for group in user.groups.all %}
+                    <span class="badge bg-secondary">{{ group.name }}</span>
+                    {% empty %}
+                    <em>Nenhum grupo</em>
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
