@@ -13,13 +13,44 @@
                     Este é um exemplo de dashboard. Observe que o menu lateral mostra apenas
                     as opções para as quais você tem permissão.
                 </p>
+
+                <!-- Cards de Resumo -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card text-white bg-primary mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Projetos</h5>
+                                <p class="card-text display-4">{{ project_count }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-white bg-success mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Clientes</h5>
+                                <p class="card-text display-4">{{ client_count }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-white bg-info mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Usuários</h5>
+                                <p class="card-text display-4">{{ user_count }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Obter atividades recentes do usuário -->
+
                 <p>
                     <strong>Usuário:</strong> {{ request.user.username }}<br>
-                    <strong>Grupos:</strong> 
+                    <strong>Grupos:</strong>
                     {% for group in request.user.groups.all %}
-                        {{ group.name }}{% if not forloop.last %}, {% endif %}
+                    {{ group.name }}{% if not forloop.last %}, {% endif %}
                     {% empty %}
-                        Nenhum grupo
+                    Nenhum grupo
                     {% endfor %}
                 </p>
             </div>
